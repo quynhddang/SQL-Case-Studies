@@ -1,1 +1,1 @@
-# 8-Week-SQL
+# 8-Week-SQL Case Studies
