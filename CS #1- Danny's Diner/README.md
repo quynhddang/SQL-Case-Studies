@@ -17,7 +17,7 @@ Danny wants to use data captured from a few months of operations to find out mor
 
 ## Entity Relationship Diagram
 
-![image alt](https://github.com/quynhddang/8-Week-SQL/blob/main/CS%20%231-%20Danny's%20Diner/erd)
+![image alt](https://github.com/quynhddang/8-Week-SQL/blob/9b156fd2b8908961f5364451ab35eee741f0cff9/CS%20%231-%20Danny's%20Diner/ERD.png)
 
 ## Questions and Solutions
 
