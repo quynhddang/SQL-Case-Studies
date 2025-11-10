@@ -1,6 +1,6 @@
 # 🏮 Case Study #1: Danny's Diner
 
-![image alt](https://8weeksqlchallenge.com/images/case-study-designs/1.png) 
+<img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/73923e95-8ef8-4703-adee-ae5751f17038" />
 
 ## 📂 Table of Contents
 
@@ -8,7 +8,7 @@
 - [Questions and Solutions](https://github.com/quynhddang/8-Week-SQL/edit/main/CS%20%231-%20Danny's%20Diner/README.md#entity-relationship-diagram)
 - [Bonus Questions](https://github.com/quynhddang/8-Week-SQL/edit/main/CS%20%231-%20Danny's%20Diner/README.md#bonus-questions)
 
-All information for the case study has been sourced [here](https://8weeksqlchallenge.com/case-study-1/)
+All information for the case study has been sourced [here](https://8weeksqlchallenge.com/case-study-1/).
 
 ## Business Task
 
