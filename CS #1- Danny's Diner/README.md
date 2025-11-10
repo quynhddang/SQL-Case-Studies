@@ -66,7 +66,7 @@ GROUP BY customer_id;
 **3. What was the first item from the menu purchased by each customer?**
 
 ```sql
-WITH orders AS (
+WITH first_orders AS (
   SELECT 
     sales.customer_id, 
     sales.order_date, 
@@ -82,7 +82,7 @@ WITH orders AS (
 SELECT 
   customer_id, 
   product_name
-FROM orders
+FROM first_orders
 WHERE rank = 1
 GROUP BY customer_id, product_name;
 ```
@@ -126,17 +126,17 @@ LIMIT 1;
 
 ```sql
 WITH most_popular AS (
-  SELECT
-  	sales.customer_id,
-  	menu.product_name,
-  	COUNT(menu.product_id) AS order_count,
-  	DENSE_RANK() OVER (
-      PARTITION BY sales.customer_id
-      ORDER BY COUNT(sales.customer_id) DESC) AS rank
-FROM dannys_diner.sales
-INNER JOIN dannys_diner.menu
-  ON sales.product_id = menu.product_id
-GROUP BY sales.customer_id, menu.product_name
+	SELECT
+  		sales.customer_id,
+  		menu.product_name,
+  		COUNT(menu.product_id) AS order_count,
+  		DENSE_RANK() OVER (
+			PARTITION BY sales.customer_id
+			ORDER BY COUNT(sales.customer_id) DESC) AS rank
+	FROM dannys_diner.sales
+	INNER JOIN dannys_diner.menu
+		ON sales.product_id = menu.product_id
+	GROUP BY sales.customer_id, menu.product_name
 )
 
 SELECT
@@ -157,8 +157,8 @@ WHERE rank = 1
 |B|sushi|2|
 |C|ramen|3|
 
-- Customers A and C enjoyed ramen the most
-- Customer B enjoyed all three items equally
+- Customers A and C enjoyed ramen the most.
+- Customer B enjoyed all three items equally.
 
 **6. Which item was purchased first by the customer after they became a member?**
 
@@ -187,6 +187,7 @@ ORDER BY customer_id ASC;
 ```
 
 **Answers:**
+
 |customer_id|product_name|
 |---|---|
 |A|ramen|
@@ -259,11 +260,12 @@ ORDER BY sales.customer_id;
 **9. If each $1 spent equates to 10 points and sushi has a 2x points multiplier - how many points would each customer have?**
 
 ```sql
-SELECT sales.customer_id,
-       SUM(CASE
-               WHEN product_name = 'sushi' THEN price*20
-               ELSE price*10
-           END) AS customer_points
+SELECT
+	sales.customer_id,
+	SUM(CASE
+		WHEN product_name = 'sushi' THEN price*20
+		ELSE price*10
+		END) AS customer_points
 FROM dannys_diner.menu 
 INNER JOIN dannys_diner.sales  
 	ON menu.product_id = sales.product_id
@@ -357,7 +359,7 @@ SELECT
     menu.product_name,
     menu.price,
     CASE
-    	WHEN members.join_Date > sales.order_date THEN 'N'
+    	WHEN members.join_date > sales.order_date THEN 'N'
         WHEN members.join_date <= sales.order_date THEN 'Y'
         ELSE 'N' END AS member_status
 FROM dannys_diner.sales
