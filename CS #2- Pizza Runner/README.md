@@ -26,7 +26,7 @@ Afte collecting data, he requires further assistance to clean his data and apply
 All solutions for this case study can be found here:
 
 - [Data Cleaning](https://github.com/quynhddang/8-Week-SQL/blob/main/CS%20%232-%20Pizza%20Runner/Data%20Cleaning.md)
-- [A.Pizza Metrics](https://github.com/quynhddang/8-Week-SQL/blob/main/CS%20%232-%20Pizza%20Runner/A.%20Pizza%20Metrics.md)
+- [A. Pizza Metrics](https://github.com/quynhddang/8-Week-SQL/blob/main/CS%20%232-%20Pizza%20Runner/A.%20Pizza%20Metrics.md)
 - [B. Runner and Customer Experience](https://github.com/quynhddang/8-Week-SQL/blob/main/CS%20%232-%20Pizza%20Runner/B.%20Runner%20%26%20Customer%20Experience.md)
 - [C. Ingredient Optimization](https://github.com/quynhddang/8-Week-SQL/blob/main/CS%20%232-%20Pizza%20Runner/C.%20Ingredient%20Optimization.md)
 - [D. Pricing and Ratings](https://github.com/quynhddang/8-Week-SQL/blob/main/CS%20%232-%20Pizza%20Runner/D.%20Pricing%20%26%20Ratings.md)
