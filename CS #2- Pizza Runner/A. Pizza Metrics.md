@@ -2,9 +2,38 @@
 
 **1. How many pizzas were ordered?**
 
+```sql
+SELECT COUNT(order_id) AS pizza_ordered
+FROM customer_orders_fix;
+```
+
+**Answer:**
+
+|pizza_ordered|
+|---|
+|14|
+
+- 14 pizzas were ordered.
+   
 **2. How many unique customer orders were made?**
 
+```sql
+SELECT COUNT (DISTINCT order_id) AS unique_orders
+FROM customer_orders_fix;
+```
+
+**Answer:**
+
+|unique_orders|
+|---|
+|10|
+
+- There were 10 unique customer orders.
+  
 **3. How many successful orders were delivered by each runner?**
+
+```sql
+
 
 **4. How many of each type of pizza was delivered?**
 
