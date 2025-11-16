@@ -33,7 +33,7 @@ FROM customer_orders_fix;
 **3. How many successful orders were delivered by each runner?**
 
 ```sql
-
+```
 
 **4. How many of each type of pizza was delivered?**
 
