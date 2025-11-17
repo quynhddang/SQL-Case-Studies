@@ -33,7 +33,24 @@ FROM customer_orders_fix;
 **3. How many successful orders were delivered by each runner?**
 
 ```sql
+SELECT
+   runner_id,
+   COUNT(order_id) AS successful_orders
+FROM runner_orders_fix
+WHERE pickup_time <> ''
+GROUP BY runner_id;
 ```
+
+**Answer:**
+
+| runner_id | successful_orders |
+| --------- | ----------------- |
+| 3         | 2                 |
+| 2         | 4                 |
+| 1         | 4                 |
+
+- Runner 3 has 2 successful deliveries.
+- Runner 2 and Runner 1 had 4 successful deliveries each.
 
 **4. How many of each type of pizza was delivered?**
 
