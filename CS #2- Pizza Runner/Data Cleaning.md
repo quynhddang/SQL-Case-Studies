@@ -5,7 +5,7 @@
 To clean up this table, we need to remove the null values from the **exclusions** column and the **extras** column:
 
 ```sql
-CREATE TEMP TABLE customer_orders_fix AS
+CREATE TABLE customer_orders_fix AS
 SELECT
 	order_id,
     customer_id,
@@ -47,7 +47,7 @@ To clean up this table, we need to:
 - remove 'minutes', 'minute', and 'mins' from the **duration** column
 
 ```sql
-CREATE TEMP TABLE runner_orders_fix AS
+CREATE TABLE runner_orders_fix AS
 SELECT
 	order_id,
     runner_id,
