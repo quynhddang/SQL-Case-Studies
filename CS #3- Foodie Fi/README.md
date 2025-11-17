@@ -9,7 +9,15 @@
 - [Questions and Solutions](https://github.com/quynhddang/8-Week-SQL/edit/main/CS%20%233-%20Foodie%20Fi/README.md#questions-and-solutions)
   
 ## Business Task
+
+Danny launched his new startup Foodie-Fi, a streaming service that only has food related content, and started selling monthly and annual subscriptions, giving customers on-demand access to exclusive food videos from around the world.
+
+This case study focuses on using subscription style digital data to answer important business questions.
+
 ## Entity Relationship Diagram
+
+<img width="698" height="290" alt="image" src="https://github.com/user-attachments/assets/bb83f8d0-ed9d-4c76-85e0-27165706d2df" />
+
 ## Questions and Solutions
 
 - [A. Customer Journey](https://github.com/quynhddang/8-Week-SQL/edit/main/CS%20%233-%20Foodie%20Fi/README.md#a-customer-journey)
@@ -18,6 +26,9 @@
 - [D. Outside The Box Questions](https://github.com/quynhddang/8-Week-SQL/edit/main/CS%20%233-%20Foodie%20Fi/README.md#d-outside-the-box-questions)
 
 ### A. Customer Journey
+
+Based off the 8 sample customers provided in the sample from the subscription table, write a brief description about each customer's onboarding journey.
+
 ### B. Data Analysis Questions
 ### C. Challenge Payment Questions
 ### D. Outside The Box Questions
