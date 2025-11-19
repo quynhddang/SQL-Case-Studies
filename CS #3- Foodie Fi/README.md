@@ -7,6 +7,8 @@
 - [Business Task](https://github.com/quynhddang/8-Week-SQL/edit/main/CS%20%233-%20Foodie%20Fi/README.md#business-task)
 - [Entity Relationship Diagram](https://github.com/quynhddang/8-Week-SQL/edit/main/CS%20%233-%20Foodie%20Fi/README.md#entity-relationship-diagram)
 - [Questions and Solutions](https://github.com/quynhddang/8-Week-SQL/edit/main/CS%20%233-%20Foodie%20Fi/README.md#questions-and-solutions)
+
+All information regarding the case study has been sourced [here](https://8weeksqlchallenge.com/case-study-3/).
   
 ## Business Task
 
@@ -167,7 +169,63 @@ ORDER BY p.plan_id;
 
 **4. What is the customer count and percentage of customers who have churned rounded to 1 decimal place?**
 
+```sql
+SELECT
+	COUNT(DISTINCT s.customer_id) AS churned_accounts,
+    ROUND(100.0 * COUNT(s.customer_id)
+    / (SELECT Count(DISTINCT customer_id)
+       FROM foodie_fi.subscriptions)
+    , 1) AS churn_percentage
+FROM foodie_fi.subscriptions AS s
+WHERE s.plan_id = 4;
+```
+
+**Answer:**
+
+| churned_accounts | churn_percentage | 
+| ---------------- | ---------------- | 
+| 307              | 30.7             |                 
+
+- 307 customers have churned their accounts. This makes up 30.7% of the overall customer count.
+  
 **5. How many customers have churned straight after their initial free trial - what percentage is this rounded to the nearest whole number?**
+
+```sql
+WITH ranks_cte AS (
+  SELECT 
+  	s.customer_id,
+  	p.plan_id,
+  	p.plan_name,
+  	ROW_NUMBER() OVER(
+    PARTITION BY s.customer_id
+    ORDER BY s.start_date) AS row_num
+  FROM foodie_fi.subscriptions AS s
+  INNER JOIN foodie_fi.plans AS p
+  	ON s.plan_id = p.plan_id
+)
+
+SELECT
+	COUNT(CASE
+          WHEN row_num = 2 AND plan_name = 'churn' THEN 1
+          ELSE 0 END) AS churned_accounts,
+    ROUND(100.0 * COUNT(CASE
+                        WHEN row_num = 2 AND plan_name = 'churn' THEN 1
+                        ELSE 0 END)
+          / (SELECT COUNT(DISTINCT customer_id)
+             FROM foodie_fi.subscriptions)
+    ,1 ) AS churn_percentage
+FROM ranks_cte
+WHERE plan_id = 4
+	AND row_num = 2;
+```
+ 
+**Answer:**
+
+| churned_accounts | churn_percentage | 
+| ---------------- | ---------------- | 
+| 92               | 9.2              |  
+
+- There were 92 customers who churned their accounts after the free trial making up 9.2% of overall customer count.
 
 **6. What is the number and percentage of customer plans after their initial free trial?**
 
