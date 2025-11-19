@@ -229,6 +229,43 @@ WHERE plan_id = 4
 
 **6. What is the number and percentage of customer plans after their initial free trial?**
 
+```sql
+WITH conversions AS (
+  SELECT 
+  	customer_id,
+  	plan_id,
+  	LEAD(plan_id) OVER(
+      PARTITION BY customer_id
+      ORDER BY plan_id) AS conversion_id 
+  FROM foodie_fi.subscriptions
+  )
+ 
+ SELECT
+  	conversion_id AS plan_id,
+    COUNT(customer_id) AS converted_customers,
+    ROUND(100.0 *
+          COUNT(customer_id)::NUMERIC
+          / (SELECT COUNT(DISTINCT customer_id)
+             FROM foodie_fi.subscriptions)
+    , 1) AS conversion_percentage
+ FROM conversions
+ WHERE conversion_id IS NOT NULL
+ 	AND plan_id = 0
+ GROUP BY conversion_id
+ ORDER BY conversion_id;
+```
+
+**Answer:**
+
+| plan_id | converted_customers | conversion_percentage |
+| ------- | ------------------- | --------------------- |
+| 1       | 546                 | 54.6                  |
+| 2       | 325                 | 32.5                  |
+| 3       | 37                  | 3.7                   |
+| 4       | 92                  | 9.2                   |
+
+- After the trial, 90.8% of customers switch to a paid plan with most opting for a basic monthly or pro monthly plan.
+  
 **7. What is the customer count and percentage breakdown of all 5 plan_name values at 2020-12-31?**
 
 **8. How many customers have upgraded to an annual plan in 2020?**
