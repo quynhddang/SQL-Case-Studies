@@ -268,7 +268,61 @@ WITH conversions AS (
   
 **7. What is the customer count and percentage breakdown of all 5 plan_name values at 2020-12-31?**
 
+```sql
+WITH next_date_cte AS (
+  SELECT
+  	s.customer_id,
+  	p.plan_id,
+    p.plan_name,
+  	s.start_date,
+  	LEAD (start_date) OVER (
+      PARTITION BY customer_id
+      ORDER BY start_date
+    ) AS next_date
+  FROM foodie_fi.subscriptions AS s
+  JOIN foodie_fi.plans AS p
+  	ON s.plan_id = p.plan_id
+  WHERE start_date <= '2020-12-31'
+ )
+ 
+ SELECT
+	plan_id,
+    plan_name,
+    COUNT(DISTINCT customer_id) AS customers,
+    ROUND(100.0 *
+          COUNT(DISTINCT customer_id)
+          / (SELECT COUNT(DISTINCT customer_id)
+             FROM foodie_fi.subscriptions)
+          ,1) AS percentage
+FROM next_date_cte
+WHERE next_date IS NULL
+GROUP BY plan_id, plan_name;
+```
+
+**Answer:**
+
+| plan_id | plan_name     | customers | percentage |
+| ------- | ------------- | --------- | ---------- |
+| 0       | trial         | 19        | 1.9        |
+| 1       | basic monthly | 224       | 22.4       |
+| 2       | pro monthly   | 326       | 32.6       |
+| 3       | pro annual    | 195       | 19.5       |
+| 4       | churn         | 236       | 23.6       |
+
 **8. How many customers have upgraded to an annual plan in 2020?**
+
+```sql
+SELECT COUNT(DISTINCT customer_id) AS number_of_annual_plans
+FROM foodie_fi.subscriptions
+WHERE start_date <= '2020-12-31'
+	AND plan_id = 3;
+```
+
+**Answer:**
+
+|number_of_annual_plans|
+|----------------------|
+| 195                  |
 
 **9. How many days on average does it take for a customer to an annual plan from the day they join Foodie-Fi?**
 
