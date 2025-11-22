@@ -3,9 +3,9 @@
 <img width="600" height="600" alt="image" src="https://github.com/user-attachments/assets/681da275-72eb-417d-af2b-9897373a4fbc" />
 
 ## 📂 Table of Contents
-- [Business Task](https://github.com/quynhddang/8-Week-SQL/edit/main/CS%20%232-%20Pizza%20Runner/README.md#business-task)
-- [Entity Relationship Diagram](https://github.com/quynhddang/8-Week-SQL/edit/main/CS%20%232-%20Pizza%20Runner/README.md#entity-relationship-program)
-- [Solutions](https://github.com/quynhddang/8-Week-SQL/edit/main/CS%20%232-%20Pizza%20Runner/README.md#solutions)
+- [Business Task](https://github.com/quynhddang/SQL-Case-Studies/tree/main/CS%20%232-%20Pizza%20Runner#business-task)
+- [Entity Relationship Diagram](https://github.com/quynhddang/SQL-Case-Studies/tree/main/CS%20%232-%20Pizza%20Runner#entity-relationship-program))
+- [Solutions](https://github.com/quynhddang/SQL-Case-Studies/tree/main/CS%20%232-%20Pizza%20Runner#solutions)
     
 All information for the case study has been sourced [here](https://8weeksqlchallenge.com/case-study-2/).
 
@@ -25,9 +25,9 @@ Afte collecting data, he requires further assistance to clean his data and apply
 
 All solutions for this case study can be found here:
 
-- [Data Cleaning](https://github.com/quynhddang/8-Week-SQL/blob/main/CS%20%232-%20Pizza%20Runner/Data%20Cleaning.md)
-- [A. Pizza Metrics](https://github.com/quynhddang/8-Week-SQL/blob/main/CS%20%232-%20Pizza%20Runner/A.%20Pizza%20Metrics.md)
-- [B. Runner and Customer Experience](https://github.com/quynhddang/8-Week-SQL/blob/main/CS%20%232-%20Pizza%20Runner/B.%20Runner%20%26%20Customer%20Experience.md)
-- [C. Ingredient Optimization](https://github.com/quynhddang/8-Week-SQL/blob/main/CS%20%232-%20Pizza%20Runner/C.%20Ingredient%20Optimization.md)
-- [D. Pricing and Ratings](https://github.com/quynhddang/8-Week-SQL/blob/main/CS%20%232-%20Pizza%20Runner/D.%20Pricing%20%26%20Ratings.md)
-- [E. Bonus Question](https://github.com/quynhddang/8-Week-SQL/blob/main/CS%20%232-%20Pizza%20Runner/E.%20Bonus%20Question.md)
+- [Data Cleaning](https://github.com/quynhddang/SQL-Case-Studies/blob/4ac43dd8bee8746c485986df1e4a558b5b3b470c/CS%20%232-%20Pizza%20Runner/Data%20Cleaning.md)
+- [A. Pizza Metrics](https://github.com/quynhddang/SQL-Case-Studies/blob/4ac43dd8bee8746c485986df1e4a558b5b3b470c/CS%20%232-%20Pizza%20Runner/A.%20Pizza%20Metrics.md)
+- [B. Runner and Customer Experience](https://github.com/quynhddang/SQL-Case-Studies/blob/4ac43dd8bee8746c485986df1e4a558b5b3b470c/CS%20%232-%20Pizza%20Runner/B.%20Runner%20%26%20Customer%20Experience.md)
+- [C. Ingredient Optimization](https://github.com/quynhddang/SQL-Case-Studies/blob/4ac43dd8bee8746c485986df1e4a558b5b3b470c/CS%20%232-%20Pizza%20Runner/C.%20Ingredient%20Optimization.md)
+- [D. Pricing and Ratings](https://github.com/quynhddang/SQL-Case-Studies/blob/4ac43dd8bee8746c485986df1e4a558b5b3b470c/CS%20%232-%20Pizza%20Runner/D.%20Pricing%20%26%20Ratings.md)
+- [E. Bonus Question](https://github.com/quynhddang/SQL-Case-Studies/blob/4ac43dd8bee8746c485986df1e4a558b5b3b470c/CS%20%232-%20Pizza%20Runner/E.%20Bonus%20Question.md)
