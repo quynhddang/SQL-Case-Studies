@@ -4,9 +4,9 @@
 
 ## 📂 Table of Contents
 
-- [Business Task](https://github.com/quynhddang/8-Week-SQL/edit/main/CS%20%233-%20Foodie%20Fi/README.md#business-task)
-- [Entity Relationship Diagram](https://github.com/quynhddang/8-Week-SQL/edit/main/CS%20%233-%20Foodie%20Fi/README.md#entity-relationship-diagram)
-- [Questions and Solutions](https://github.com/quynhddang/8-Week-SQL/edit/main/CS%20%233-%20Foodie%20Fi/README.md#questions-and-solutions)
+- [Business Task](https://github.com/quynhddang/SQL-Case-Studies/blob/main/CS%20%233-%20Foodie%20Fi/README.md#business-task)
+- [Entity Relationship Diagram](https://github.com/quynhddang/SQL-Case-Studies/blob/main/CS%20%233-%20Foodie%20Fi/README.md#entity-relationship-diagram)
+- [Questions and Solutions](https://github.com/quynhddang/SQL-Case-Studies/blob/main/CS%20%233-%20Foodie%20Fi/README.md#questions-and-solutions)
 
 All information regarding the case study has been sourced [here](https://8weeksqlchallenge.com/case-study-3/).
   
@@ -22,8 +22,8 @@ This case study focuses on using subscription style digital data to answer impor
 
 ## Questions and Solutions
 
-- [A. Customer Journey](https://github.com/quynhddang/8-Week-SQL/edit/main/CS%20%233-%20Foodie%20Fi/README.md#a-customer-journey)
-- [B. Data Analysis Questions](https://github.com/quynhddang/8-Week-SQL/edit/main/CS%20%233-%20Foodie%20Fi/README.md#b-data-analysis-questions)
+- [A. Customer Journey](https://github.com/quynhddang/SQL-Case-Studies/blob/main/CS%20%233-%20Foodie%20Fi/README.md#a-customer-journey)
+- [B. Data Analysis Questions](https://github.com/quynhddang/SQL-Case-Studies/blob/main/CS%20%233-%20Foodie%20Fi/README.md#b-data-analysis-questions)
 
 ### A. Customer Journey
 
