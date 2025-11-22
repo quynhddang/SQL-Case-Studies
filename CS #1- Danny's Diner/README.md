@@ -4,10 +4,10 @@
 
 ## 📂 Table of Contents
 
-- [Business Task](https://github.com/quynhddang/8-Week-SQL/edit/main/CS%20%231-%20Danny's%20Diner/README.md#business-task)
-- [Entity Relationship Diagram](https://github.com/quynhddang/8-Week-SQL/edit/main/CS%20%231-%20Danny's%20Diner/README.md#entity-relationshop-diagram)
-- [Questions and Solutions](https://github.com/quynhddang/8-Week-SQL/edit/main/CS%20%231-%20Danny's%20Diner/README.md#entity-relationship-diagram)
-- [Bonus Questions](https://github.com/quynhddang/8-Week-SQL/edit/main/CS%20%231-%20Danny's%20Diner/README.md#bonus-questions)
+- [Business Task](https://github.com/quynhddang/SQL-Case-Studies/tree/main/CS%20%231-%20Danny's%20Diner#business-task)
+- [Entity Relationship Diagram](https://github.com/quynhddang/SQL-Case-Studies/tree/main/CS%20%231-%20Danny's%20Diner#entity-relationship-diagram)
+- [Questions and Solutions](https://github.com/quynhddang/SQL-Case-Studies/tree/main/CS%20%231-%20Danny's%20Diner#questions-and-solutions)
+- [Bonus Questions](https://github.com/quynhddang/SQL-Case-Studies/tree/main/CS%20%231-%20Danny's%20Diner#bonus-questions)
 
 All information for the case study has been sourced [here](https://8weeksqlchallenge.com/case-study-1/).
 
