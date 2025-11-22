@@ -33,9 +33,64 @@ This case study focuses on calculating metrics, growth, and helping the business
 
 **1. How many unique nodes are there on the Data Bank system?**
 
+```sql
+SELECT COUNT(DISTINCT node_id) AS unique_nodes
+FROM customer_nodes;
+```
+
+**Answer:**
+
+| unique_nodes |
+| ------------ |
+| 5            |
+
+- There are 5 unique nodes in the Data Bank system.
+
 **2. What is the number of nodes per region?**
 
+```sql
+SELECT 
+	r.region_id,
+    r.region_name,
+    COUNT(DISTINCT c.node_id) as node_count
+FROM data_bank.regions AS r
+INNER JOIN data_bank.customer_nodes AS c
+	ON r.region_id = c.region_id
+GROUP BY r.region_id, r.region_name;
+```
+
+**Answer:**
+
+| region_id | region_name | node_count |
+| --------- | ----------- | ---------- |
+| 1         | Australia   | 5          |
+| 2         | America     | 5          |
+| 3         | Africa      | 5          |
+| 4         | Asia        | 5          |
+| 5         | Europe      | 5          |
+
 **3. How many customers are allocated to each region?**
+
+```sql
+SELECT 
+	r.region_id,
+    r.region_name,
+    COUNT(DISTINCT c.customer_id) as customer_count
+FROM data_bank.regions AS r
+INNER JOIN data_bank.customer_nodes AS c
+	ON r.region_id = c.region_id
+GROUP BY r.region_id, r.region_name;
+```
+
+**Answer**
+
+| region_id | region_name | customer_count |
+| --------- | ----------- | -------------- |
+| 1         | Australia   | 110            |
+| 2         | America     | 105            |
+| 3         | Africa      | 102            |
+| 4         | Asia        | 95             |
+| 5         | Europe      | 88             |
 
 **4. How many days on average are customers reallocated to a different node?**
 
