@@ -67,7 +67,7 @@ ORDER BY subscriptions.customer_id, plans.plan_id;
 | 19          | 2       | pro monthly   | 2020-06-29 |
 | 19          | 3       | pro annual    | 2020-08-29 |
 
-Based on the results, I will focus on three customers and their onbaording journeys.
+Based on the results, I will focus on three customers and their onboarding journeys.
 
 - Customer 15 started their free trial on 17 March 2020. After the trial ended, they upgraded to the pro monthly plan on 24 March 2020. However, after a month on 29 April 2020, they decided to cancel their membership and churn until the subscription ended.
 
