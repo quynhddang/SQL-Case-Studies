@@ -24,8 +24,6 @@ This case study focuses on using subscription style digital data to answer impor
 
 - [A. Customer Journey](https://github.com/quynhddang/8-Week-SQL/edit/main/CS%20%233-%20Foodie%20Fi/README.md#a-customer-journey)
 - [B. Data Analysis Questions](https://github.com/quynhddang/8-Week-SQL/edit/main/CS%20%233-%20Foodie%20Fi/README.md#b-data-analysis-questions)
-- [C. Challenge Payment Question](https://github.com/quynhddang/8-Week-SQL/edit/main/CS%20%233-%20Foodie%20Fi/README.md#c-challenge-payment-questions)
-- [D. Outside The Box Questions](https://github.com/quynhddang/8-Week-SQL/edit/main/CS%20%233-%20Foodie%20Fi/README.md#d-outside-the-box-questions)
 
 ### A. Customer Journey
 
@@ -326,10 +324,115 @@ WHERE start_date <= '2020-12-31'
 
 **9. How many days on average does it take for a customer to an annual plan from the day they join Foodie-Fi?**
 
+```sql
+WITH trial_plan AS (
+  SELECT
+  	customer_id,
+  	start_date AS trial_date
+  FROM foodie_fi.subscriptions
+  WHERE plan_id = 0
+), annual_plan AS (
+  SELECT
+  	customer_id,
+  	start_date AS annual_date
+  FROM foodie_fi.subscriptions
+  WHERE plan_id = 3
+)
+
+SELECT 
+	ROUND(
+      AVG(
+        a.annual_date - t.trial_date)
+    ,0) AS avg_days_to_upgrade
+FROM annual_plan AS a
+INNER JOIN trial_plan AS t
+	ON a.customer_id = t.customer_id;
+```
+
+**Answer:**
+
+| avg_days_to_upgrade |
+| ------------------- |
+| 105                 |
+
+- Customers take an average of 100 days to switch to the annual plan.
+  
 **10. Can you further breakdown this average value into 30 day periods (i.e. 0-30 days, 31-60 days etc)**
+
+```sql
+WITH trial_plan AS (
+  SELECT
+  	customer_id,
+  	start_date AS trial_date
+  FROM foodie_fi.subscriptions
+  WHERE plan_id = 0
+), annual_plan AS (
+  SELECT
+  	customer_id,
+  	start_date AS annual_date
+  FROM foodie_fi.subscriptions
+  WHERE plan_id = 3
+), bins AS (
+  SELECT
+  	WIDTH_BUCKET(a.annual_date - t.trial_date, 0, 365, 12) AS avg_days_to_upgrade
+  FROM trial_plan AS t
+  INNER JOIN annual_plan AS a
+  	ON t.customer_id = a.customer_id
+)
+
+SELECT 
+	((avg_days_to_upgrade - 1) * 30 || ' - ' || avg_days_to_upgrade * 30 || ' days') AS bucket,
+    COUNT (*) AS num_of_customers
+FROM bins
+GROUP BY avg_days_to_upgrade
+ORDER BY avg_days_to_upgrade;
+```
+
+**Answer:**
+
+| bucket         | num_of_customers |
+| -------------- | ---------------- |
+| 0 - 30 days    | 49               |
+| 30 - 60 days   | 24               |
+| 60 - 90 days   | 35               |
+| 90 - 120 days  | 35               |
+| 120 - 150 days | 43               |
+| 150 - 180 days | 37               |
+| 180 - 210 days | 24               |
+| 210 - 240 days | 4                |
+| 240 - 270 days | 4                |
+| 270 - 300 days | 1                |
+| 300 - 330 days | 1                |
+| 330 - 360 days | 1                |
 
 **11. How many customers downgraded from a pro monthly to a basic monthly plan in 2020?**
 
-### C. Challenge Payment Questions
-### D. Outside The Box Questions
+```sql
+WITH ranked_cte AS (
+  SELECT
+  	s.customer_id,
+  	p.plan_id,
+  	p.plan_name,
+  		LEAD(p.plan_id) OVER(
+          PARTITION BY s.customer_id
+          ORDER BY s.start_date) AS next_plan_id
+  FROM foodie_fi.subscriptions AS s
+  INNER JOIN foodie_fi.plans AS p
+  	ON s.plan_id = p.plan_id
+  WHERE DATE_PART('year', start_date) = 2020
+)
 
+SELECT
+	COUNT(customer_id) AS churned_customers
+FROM ranked_cte
+WHERE plan_id = 2
+	AND next_plan_id = 1;
+```
+
+**Answer:**
+
+| churned_customers |
+| ----------------- |
+| 0                 |
+
+- There were no customers that downgraded from a pro monthly plan to a basic monthly plan in 2020.
