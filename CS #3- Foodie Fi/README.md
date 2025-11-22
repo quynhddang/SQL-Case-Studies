@@ -355,7 +355,7 @@ INNER JOIN trial_plan AS t
 | ------------------- |
 | 105                 |
 
-- Customers take an average of 100 days to switch to the annual plan.
+- Customers take an average of 105 days to switch to the annual plan.
   
 **10. Can you further breakdown this average value into 30 day periods (i.e. 0-30 days, 31-60 days etc)**
 
