@@ -101,7 +101,7 @@ WITH node_days AS (
   	node_id,
   	end_date - start_date AS days_in_node
   FROM data_bank.customer_nodes
-  WHERE end_Date != '9999-12-31'
+  WHERE end_date != '9999-12-31'
   GROUP BY customer_id, node_id, start_date, end_date
 )
 , total_node_days AS (
@@ -126,16 +126,121 @@ FROM total_node_days;
 
 - Customers are reallocated every 24 days on average.
   
-
 **5. What is the median, 80th and 95th percentile for this same reallocation days metric for each region?**
+
+```sql
+WITH reallocation_date AS (
+  SELECT *,
+  LEAD(start_date) OVER(
+    PARTITION BY customer_id ORDER BY start_date) AS realloc_date
+  FROM data_bank.customer_nodes
+), day_diff AS (
+  SELECT *,
+  	(realloc_date - start_date) AS day_diff
+  FROM reallocation_date
+  WHERE realloc_date IS NOT NULL)
+
+SELECT 
+	r.region_id,
+    r.region_name,
+    PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY day_diff) AS median,
+    PERCENTILE_CONT(0.8) WITHIN GROUP (ORDER BY day_diff) AS percentile_80,
+    PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY day_diff) AS percentile_95
+FROM day_diff AS d
+JOIN data_bank.regions AS r
+	ON d.region_id = r.region_id
+GROUP BY r.region_id, r.region_name    
+ORDER BY r.region_id, r.region_name;
+```
+
+**Answer:**
+
+| region_id | region_name | median | percentile_80 | percentile_90 |
+| --------- | ----------- | ------ | ------------- | ------------- |
+| 1         | Australia   | 16     | 24            | 29            |
+| 2         | America     | 16     | 24            | 29            |
+| 3         | Africa      | 16     | 25            | 29            |
+| 4         | Asia        | 16     | 24            | 29            |
+| 5         | Europe      | 16     | 25            | 29            |
 
 ### B. Customer Transactions
 
 **1. What is the unique count and total amount for each transaction type?**
 
+```sql
+SELECT
+	txn_type,
+    COUNT(customer_id) as unique_count,
+    SUM(txn_amount) AS total_amount
+FROM data_bank.customer_transactions
+GROUP BY txn_type;
+```
+
+**Answer:**
+
+| txn_type   | unique_count | total_amount |
+| ---------- | ------------ | ------------ |
+| purchase   | 1617         | 806537       |
+| deposit    | 2671         | 1359168      |
+| withdrawal | 1580         | 793003       |
+
 **2. What is the average total historical deposit counts and amounts for all customers?**
 
+```sql
+WITH deposit_summary AS (
+  SELECT
+	customer_id,
+    txn_type,
+    COUNT(customer_id) AS txn_count,
+    SUM(txn_amount) AS avg_amount
+  FROM data_bank.customer_transactions
+  WHERE txn_type = 'deposit'
+  GROUP BY customer_id, txn_type
+)
+
+SELECT
+	ROUND(AVG(txn_count), 0) AS average_historical_deposit,
+    ROUND(AVG(avg_amount), 2) AS average_deposit_amount
+FROM deposit_summary;
+```
+
+**Answer:**
+
+| average_historical_deposit | average_deposit_amount |
+| -------------------------- | ---------------------- |
+| 5                          | 2718.34                |
+
 **3. For each month - how many Data Bank customers make more than 1 deposit and either 1 purchase or 1 withdrawal in a single month?**
+
+```sql
+WITH monthly_transaction AS (
+  SELECT 
+  	customer_id, 
+  	DATE_PART('month', txn_date) AS month_id,
+  	TO_CHAR(txn_date, 'month') AS month_name,
+  	SUM(CASE WHEN txn_type = 'deposit' THEN 0 ELSE 1 END) AS deposit_count,
+  	SUM(CASE WHEN txn_type = 'purchase' THEN 0 ELSE 1 END) AS purchase_count,
+  	SUM(CASE WHEN txn_type = 'withdrawal' THEN 1 ELSE 0 END) AS withdrawal_count
+  FROM data_bank.customer_transactions
+  GROUP BY customer_id, DATE_PART('month', txn_date), TO_CHAR(txn_date, 'month')
+)
+    
+SELECT
+	month_id,
+    month_name,
+    COUNT(DISTINCT customer_id) AS customer_count
+FROM monthly_transaction
+WHERE deposit_count > 1
+	AND (purchase_count >= 1 OR withdrawal_count >= 1)
+GROUP BY month_id, month_name;
+```
+
+| month_id | month_name | customer_count |
+| -------- | ---------- | -------------- |
+| 1        | january    | 170            |
+| 2        | february   | 277            |
+| 3        | march      | 292            |
+| 4        | april      | 103            |
 
 **4. What is the closing balance for each customer at the end of the month?**
 
