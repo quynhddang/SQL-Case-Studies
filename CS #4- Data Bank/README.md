@@ -244,4 +244,89 @@ GROUP BY month_id, month_name;
 
 **4. What is the closing balance for each customer at the end of the month?**
 
+```sql
+WITH customer_balance AS (
+  SELECT
+  	customer_id,
+  	DATE_PART('month', txn_date) AS month,
+  	TO_CHAR(txn_date, 'month') AS month_name,
+  	SUM(CASE
+        WHEN txn_type = 'deposit' THEN txn_amount ELSE -txn_amount END) AS net_amount
+  FROM customer_transactions
+  GROUP BY customer_id, month, month_name
+  ORDER BY customer_id
+)
+  
+SELECT
+	customer_id,
+    month,
+    month_name,
+    SUM(net_amount) OVER (
+      PARTITION BY customer_id ORDER BY month_name 
+      ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS closing_balance
+FROM customer_balance
+GROUP BY customer_id, month, month_name, net_amount
+ORDER BY customer_id, month;
+```
+
+**Answer:**
+
+| customer_id | month | month_name | closing_balance |
+| ----------- | ----- | ---------- | --------------- |
+| 1           | 1     | january    | 312             |
+| 1           | 3     | march      | -640            |
+| 2           | 1     | january    | 549             |
+| 2           | 3     | march      | 610             |
+| 3           | 1     | january    | -328            |
+| 3           | 2     | february   | -472            |
+| 3           | 3     | march      | -729            |
+| 3           | 4     | april      | 493             |
+| 4           | 1     | january    | 848             |
+| 4           | 3     | march      | 655             |
+
+- Since the result is too long, only the results for customers 1-4 are shown.
+
 **5. What is the percentage of customers who increase their closing balance by more than 5%?**
+
+```sql
+WITH customer_balance AS (
+  SELECT
+  	customer_id,
+  	DATE_PART('month', txn_date) AS month,
+  	SUM(CASE
+        WHEN txn_type = 'deposit' THEN txn_amount ELSE -txn_amount END) AS net_amount
+  FROM customer_transactions
+  GROUP BY customer_id, month 
+  ORDER BY customer_id
+), closing_balance AS(
+  SELECT
+	customer_id,
+    month,
+    SUM(net_amount) OVER (PARTITION BY customer_id, month ORDER BY month
+      ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS closing_balance
+FROM customer_balance
+GROUP BY customer_id, month, net_amount
+ORDER BY customer_id
+), percentage_inc AS (
+  SELECT
+  	customer_id,
+  	month,
+  	closing_balance,
+  	100 *(closing_balance - LAG(closing_balance) OVER(PARTITION BY customer_id ORDER BY	month))
+   		 / NULLIF( LAG(closing_balance) OVER(PARTITION BY customer_id ORDER BY	month), 2) AS percentage_increase
+  FROM closing_balance
+)
+
+SELECT
+	100 * COUNT(DISTINCT customer_id)/ (SELECT COUNT(DISTINCT customer_id) FROM customer_transactions)::float AS percentage_customer
+FROM percentage_inc
+WHERE percentage_increase > 5;
+```
+
+**Answer:** 
+
+| percentage_customer |
+| ------------------- |
+| 53.8                |
+
+- 53.8% of customer have a closing balance exceeding 5%. 
