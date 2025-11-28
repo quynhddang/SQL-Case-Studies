@@ -1,1 +1,100 @@
+# 🏪🌿 CS# 5: Data Mart
 
+<img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/e411c63c-24dc-4bdc-b7c9-3ca34e39e6f2" />
+
+## 📂 Table of Contents
+
+- [Business Task](https://github.com/quynhddang/SQL-Case-Studies/edit/main/CS%20%235-%20Data%20Mart/README.md#business-task)
+- [Entity Relationship Diagram](https://github.com/quynhddang/SQL-Case-Studies/edit/main/CS%20%235-%20Data%20Mart/README.md#entity-relationship-diagram)
+- [Questions and Solutions](https://github.com/quynhddang/SQL-Case-Studies/edit/main/CS%20%235-%20Data%20Mart/README.md#questions-and-solutions)
+
+All information regarding the case study has been sourced [here](https://8weeksqlchallenge.com/case-study-5/).
+
+## Business Task
+
+Data Mart is an international online supermarket that specializes in fresh produce.
+
+In June 2020, large scale supply changes were made at Data Mart. All Data Mart products now use sustainable packaging methods in every single step from the farm to the customer.
+
+Danny needs help to quantify the impact of this change on the sales performance for Data Mart and it's separate business areas.
+
+## Entity Relationship Diagram
+
+<img width="336" height="400" alt="image" src="https://github.com/user-attachments/assets/88e1adc5-4714-431b-99b5-f2abb15432ff" />
+
+Further details about the dataset:
+
+- Data Mart has international operations using a multi-`region` strategy.
+- Data Mart has both, a retail and online `platform` in the form of a Shopify store front to serve their customers.
+- Customer `segment` and `customer_type` data relates to personal age and demographics information that is shared with Data Mart.
+- `transactions` is the count of unique purchases made through Data Mart and `sales` is the actual dollar amount of purchases.
+
+Each record in the dataset is related to a specific aggregated slice of the underlying sales data rolled up into a `week_date` value which represents the start of the sales week.
+
+## Questions and Solutions
+
+- [A. Data Cleaning](https://github.com/quynhddang/SQL-Case-Studies/edit/main/CS%20%235-%20Data%20Mart/README.md#a-data-cleaning)
+- [B. Data Exploration](https://github.com/quynhddang/SQL-Case-Studies/edit/main/CS%20%235-%20Data%20Mart/README.md#b-data-exploration)
+- [C. Before & After Analysis](https://github.com/quynhddang/SQL-Case-Studies/edit/main/CS%20%235-%20Data%20Mart/README.md#c-before--after-analysis)
+
+### A. Data Cleaning
+
+In a single query, perform the following operations and generate a new table in the `data_mart` schema named `clean_weekly_sales`:
+
+- Convert the `week_date` to a `DATE` format
+- Add a `week_number` as the second column for each `week_date` value, for example any value from the 1st of January to 7th of January will be 1, 8th to 14th will be 2 etc
+- Add a `month_number` with the calendar month for each `week_date` value as the 3rd column
+- Add a `calendar_year` column as the 4th column containing either 2018, 2019 or 2020 values
+- Add a new column called `age_band` after the original `segment` column using the following mapping on the number inside the `segment` value
+
+| segment |	age_band    |
+| ------- | ----------- |
+| 1	      | Young Adults|
+| 2	      | Middle Aged |
+| 3 or 4	| Retirees    |
+
+- Add a new `demographic` column using the following mapping for the first letter in the `segment` values:
+
+| segment | demographic |
+| ------- | ----------- |
+| C	      | Couples     | 
+| F	      | Families    |
+
+- Ensure all `null` string values with an "unknown" string value in the original `segment` column as well as the new `age_band` and `demographic` columns
+- Generate a new `avg_transaction` column as the `sales` value divided by `transactions` rounded to 2 decimal places for each record
+
+### B. Data Exploration
+
+**1. What day of the week is used for each week_date value?**
+
+**2. What range of week numbers are missing from the dataset?**
+
+**3. How many total transactions were there for each year in the dataset?**
+
+**4. What is the total sales for each region for each month?**
+
+**5. What is the total count of transactions for each platform**
+
+**6. What is the percentage of sales for Retail vs Shopify for each month?**
+
+**7. What is the percentage of sales by demographic for each year in the dataset?**
+
+**8. Which age_band and demographic values contribute the most to Retail sales?**
+
+**9. Can we use the avg_transaction column to find the average transaction size for each year for Retail vs Shopify? If not - how would you calculate it instead?**
+
+### C. Before & After Analysis
+
+This technique is usually used when we inspect an important event and want to inspect the impact before and after a certain point in time.
+
+Taking the `week_date` value of `2020-06-15` as the baseline week where the Data Mart sustainable packaging changes came into effect.
+
+We would include all `week_date` values for `2020-06-15` as the start of the period after the change and the previous `week_date` values would be before
+
+Using this analysis approach - answer the following questions:
+
+**1. What is the total sales for the 4 weeks before and after `2020-06-15`? What is the growth or reduction rate in actual values and percentage of sales?**
+
+**2. What about the entire 12 weeks before and after?**
+
+**3. How do the sale metrics for these 2 periods before and after compare with the previous years in 2018 and 2019?**
