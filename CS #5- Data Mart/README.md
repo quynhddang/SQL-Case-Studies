@@ -122,11 +122,80 @@ FROM clean_weekly_sales;
 
 **2. What range of week numbers are missing from the dataset?**
 
+```sql
+SELECT DISTINCT(week_number) 
+FROM clean_weekly_sales
+ORDER BY week_number ASC;
+```
+
+**Answer:**
+
+| week_number |
+| ----------- |
+| 13          |
+| 14          |
+| 15          |
+| 16          |
+| 17          |
+| 18          |
+
+- Only the first 6 rows of the results are posted here, but the results showed weeks 13 - 36 which means weeks 1 - 12 and 37 - 52 are missing from the dataset.
+  
 **3. How many total transactions were there for each year in the dataset?**
+
+```sql
+SELECT
+	calendar_year,
+    SUM(transactions) AS total_transactions
+FROM clean_weekly_sales
+GROUP BY calendar_year
+ORDER BY calendar_year;
+```
+
+**Answer:**
+
+| calendar_year | total_transactions |
+| ------------- | ------------------ |
+| 2018          | 346406460          |
+| 2019          | 365639285          |
+| 2020          | 375813651          |
 
 **4. What is the total sales for each region for each month?**
 
+```sql
+SELECT
+	month_number,
+    region,
+    SUM(sales) AS total_sales
+FROM clean_weekly_sales
+GROUP BY month_number, region
+ORDER BY month_number, region;
+```
+
+**Answer:**
+
+| month_number | region        | total_sales |
+| ------------ | ------------- | ----------- |
+| 9            | AFRICA        | 276320987   |
+| 9            | ASIA          | 252836807   |
+| 9            | CANADA        | 69067959    |
+| 9            | EUROPE        | 18877433    |
+| 9            | OCEANIA       | 372465518   |
+| 9            | SOUTH AMERICA | 34175583    |
+| 9            | USA           | 110532368   |
+
+- Only the total sales for September are posted.
+  
 **5. What is the total count of transactions for each platform**
+
+```sql
+SELECT
+	platform,
+    SUM(transactions) AS total_transactions
+FROM clean_weekly_sales
+GROUP BY platform
+ORDER BY platform;
+```
 
 **6. What is the percentage of sales for Retail vs Shopify for each month?**
 
