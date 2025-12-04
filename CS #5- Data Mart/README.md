@@ -197,11 +197,127 @@ GROUP BY platform
 ORDER BY platform;
 ```
 
+**Answer**:
+
+| platform | total_transactions |
+| -------- | ------------------ |
+| Retail   | 1081934227         |
+| Shopify  | 5925169            |
+
 **6. What is the percentage of sales for Retail vs Shopify for each month?**
+
+```sql
+WITH monthly_sales AS (
+  SELECT
+  	calendar_year, 
+  	month_number,
+  	platform,
+  	SUM(sales) AS monthly_sales
+  FROM clean_weekly_sales
+  GROUP BY calendar_year, month_number, platform
+)
+
+SELECT
+	calendar_year,
+    month_number,
+    ROUND(100* MAX
+          (CASE
+           WHEN platform = 'Retail' THEN monthly_sales ELSE NULL END)
+          / SUM(monthly_sales),2) AS retail_percentage,
+    ROUND(100 * MAX
+          (CASE
+           WHEN platform = 'Shopify' THEN monthly_sales ELSE NULL END)
+          / SUM(monthly_sales),2) AS shopify_percentage
+FROM monthly_sales
+GROUP BY calendar_year, month_number
+ORDER BY calendar_year, month_number;
+```
+
+**Answer:**
+
+| calendar_year | month_number | retail_percentage | shopify_percentage |
+| ------------- | ------------ | ----------------- | ------------------ |
+| 2018          | 3            | 97.92             | 2.08               |
+| 2018          | 4            | 97.93             | 2.07               |
+| 2018          | 5            | 97.73             | 2.27               |
+| 2018          | 6            | 97.76             | 2.24               |
+| 2018          | 7            | 97.75             | 2.25               |
+| 2018          | 8            | 97.71             | 2.29               |
+| 2018          | 9            | 97.68             | 2.32               |
+
+- Only results from 2018 are displayed. The results includes the percentage of sales for each month until 2020.
 
 **7. What is the percentage of sales by demographic for each year in the dataset?**
 
+```sql
+WITH demographic_sales AS (
+  SELECT
+  	calendar_year, 
+  	demographic,
+  	SUM(sales) AS yearly_sales
+  FROM clean_weekly_sales
+  GROUP BY calendar_year, demographic
+)
+
+SELECT
+	calendar_year,
+    ROUND(100* MAX
+          (CASE
+           WHEN demographic = 'Couples' THEN yearly_sales ELSE NULL END)
+          / SUM(yearly_sales),2) AS couples_percentage,
+    ROUND(100 * MAX
+          (CASE
+           WHEN demographic = 'Families' THEN yearly_sales ELSE NULL END)
+          / SUM(yearly_sales),2) AS families_percentage,
+    ROUND(100 * MAX
+          (CASE
+           WHEN demographic = 'unknown' THEN yearly_sales ELSE NULL END)
+          / SUM(yearly_sales),2) AS unknown_percentage
+FROM demographic_sales
+GROUP BY calendar_year
+ORDER BY calendar_year;
+```
+
+**Answer:** 
+
+| calendar_year | couples_percentage | families_percentage | unknown_percentage |
+| ------------- | ------------------ | ------------------- | ------------------ |
+| 2018          | 26.38              | 31.99               | 41.63              |
+| 2019          | 27.28              | 32.47               | 40.25              |
+| 2020          | 28.72              | 32.73               | 38.55              |
+
+
 **8. Which age_band and demographic values contribute the most to Retail sales?**
+
+```sql
+SELECT 
+  age_band, 
+  demographic, 
+  SUM(sales) AS retail_sales,
+  ROUND(100 * 
+    SUM(sales)::NUMERIC 
+    / SUM(SUM(sales)) OVER (),
+  1) AS contribution_percentage
+FROM clean_weekly_sales
+WHERE platform = 'Retail'
+GROUP BY age_band, demographic
+ORDER BY retail_sales DESC;
+```
+
+**Answer:**
+
+
+| age_band     | demographic | retail_sales | contribution_percentage |
+| ------------ | ----------- | ------------ | ----------------------- |
+| unknown      | unknown     | 16067285533  | 40.5                    |
+| Retirees     | Families    | 6634686916   | 16.7                    |
+| Retirees     | Couples     | 6370580014   | 16.1                    |
+| Middle Aged  | Families    | 4354091554   | 11.0                    |
+| Young Adults | Couples     | 2602922797   | 6.6                     |
+| Middle Aged  | Couples     | 1854160330   | 4.7                     |
+| Young Adults | Families    | 1770889293   | 4.5                     |
+
+- The unknown `age_band` and `demographic` values contributed the most to retail sales.
 
 **9. Can we use the avg_transaction column to find the average transaction size for each year for Retail vs Shopify? If not - how would you calculate it instead?**
 
