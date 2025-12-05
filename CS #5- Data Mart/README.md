@@ -321,6 +321,30 @@ ORDER BY retail_sales DESC;
 
 **9. Can we use the avg_transaction column to find the average transaction size for each year for Retail vs Shopify? If not - how would you calculate it instead?**
 
+We can not use the `avg_transaction` column to find the average transactions size for each year because using an average to calculate another average leads to inaccurate and incorrect results. In order to find the average transaction size for each year, the total sum of sales must be divided by the total sum of transactions for each year and platform.
+
+```sql
+SELECT
+	calendar_year,
+    platform,
+    ROUND(AVG(avg_transaction), 2) AS incorrect_avg,
+    ROUND(SUM(sales)::NUMERIC/ SUM(transactions), 2) AS correct_avg
+FROM clean_weekly_sales
+GROUP BY calendar_year, platform
+ORDER BY calendar_year, platform;
+```
+
+**Answer:**
+
+| calendar_year | platform | incorrect_avg | correct_avg |
+| ------------- | -------- | ------------- | ----------- |
+| 2018          | Retail   | 42.91         | 36.56       |
+| 2018          | Shopify  | 188.28        | 192.48      |
+| 2019          | Retail   | 41.97         | 36.83       |
+| 2019          | Shopify  | 177.56        | 183.36      |
+| 2020          | Retail   | 40.64         | 36.56       |
+| 2020          | Shopify  | 174.87        | 179.03      |
+
 ### C. Before & After Analysis
 
 This technique is usually used when we inspect an important event and want to inspect the impact before and after a certain point in time.
@@ -333,6 +357,145 @@ Using this analysis approach - answer the following questions:
 
 **1. What is the total sales for the 4 weeks before and after `2020-06-15`? What is the growth or reduction rate in actual values and percentage of sales?**
 
+First, we need to determine the week number matching to `2020-06-15`.
+
+```sql
+SELECT DISTINCT week_number
+FROM clean_weekly_sales
+WHERE week_date = '2020-06-15'
+	AND calendar_year = '2020';
+```
+
+| week_number |
+| ----------- |
+| 25          |
+
+Next, we determine the total sales for 4 weeks before and after `2020-06-15`.
+
+```sql
+WITH packaging_changes AS (
+  SELECT
+  	week_date,
+  	week_number,
+  	SUM(sales) AS total_sales
+  FROM clean_weekly_sales
+  WHERE (week_number BETWEEN 21 AND 28)
+  	AND calendar_year = '2020'
+  GROUP BY week_date, week_number
+)
+
+SELECT
+	SUM(CASE
+        WHEN week_number BETWEEN 21 AND 24 THEN total_sales END) AS before_packaging_sales,
+    SUM(CASE
+        WHEN week_number BETWEEN 25 AND 28 THEN total_sales END) AS after_packaging_sales
+FROM packaging_changes;
+```
+
+| before_packaging_sales | after_packaging_sales |
+| ---------------------- | --------------------- |
+| 2345878357             | 2318994169            |
+
+Finally, we now determine the growth or reduction rate in actual values and percentage of sales.
+
+```sql
+WITH packaging_changes AS (
+  SELECT
+  	week_date,
+  	week_number,
+  	SUM(sales) AS total_sales
+  FROM clean_weekly_sales
+  WHERE (week_number BETWEEN 21 AND 28)
+  	AND calendar_year = '2020'
+  GROUP BY week_date, week_number
+), before_after_sale AS (
+  SELECT
+	SUM(CASE
+        WHEN week_number BETWEEN 21 AND 24 THEN total_sales END) AS before_packaging_sales,
+    SUM(CASE
+        WHEN week_number BETWEEN 25 AND 28 THEN total_sales END) AS after_packaging_sales
+  FROM packaging_changes
+)
+
+SELECT 
+	after_packaging_sales - before_packaging_sales AS sale_changes,
+    ROUND(100* (after_packaging_sales - before_packaging_sales)
+          		/before_packaging_sales, 2) AS reduction_rate
+FROM before_after_sale;
+```
+| sale_changes | reduction_rate |
+| ------------ | -------------- |
+| -26884188    | -1.15          |
+
+Since the packaging changes, there has been a decrease in sales by $26,884,188 at a reduction rate of 1.15%. 
+
 **2. What about the entire 12 weeks before and after?**
 
+```sql
+WITH packaging_changes AS (
+  SELECT
+  	week_date,
+  	week_number,
+  	SUM(sales) AS total_sales
+  FROM clean_weekly_sales
+  WHERE (week_number BETWEEN 13 AND 37)
+  	AND calendar_year = '2020'
+  GROUP BY week_date, week_number
+), before_after_sale AS (
+  SELECT
+	SUM(CASE
+        WHEN week_number BETWEEN 13 AND 24 THEN total_sales END) AS before_packaging_sales,
+    SUM(CASE
+        WHEN week_number BETWEEN 25 AND 37 THEN total_sales END) AS after_packaging_sales
+  FROM packaging_changes
+)
+
+SELECT 
+	after_packaging_sales - before_packaging_sales AS sale_changes,
+    ROUND(100* (after_packaging_sales - before_packaging_sales)
+          		/before_packaging_sales, 2) AS reduction_rate
+FROM before_after_sale;
+```
+| sale_changes | reduction_rate |
+| ------------ | -------------- |
+| -152325394   | -2.14          |
+
+Based on these results, there have been more losses in sales with an increased reduction rate of 2.14%. 
+
 **3. How do the sale metrics for these 2 periods before and after compare with the previous years in 2018 and 2019?**
+
+```sql
+WITH packaging_changes AS (
+  SELECT
+  	calendar_year,
+  	week_number,
+  	SUM(sales) AS total_sales
+  FROM clean_weekly_sales
+  WHERE (week_number BETWEEN 13 AND 37)
+  GROUP BY calendar_year, week_number
+), before_after_sale AS (
+  SELECT
+  	calendar_year,
+	SUM(CASE
+        WHEN week_number BETWEEN 13 AND 24 THEN total_sales END) AS before_packaging_sales,
+    SUM(CASE
+        WHEN week_number BETWEEN 25 AND 37 THEN total_sales END) AS after_packaging_sales
+  FROM packaging_changes
+  GROUP BY calendar_year
+)
+
+SELECT 
+	calendar_year,
+	after_packaging_sales - before_packaging_sales AS sale_changes,
+    ROUND(100* (after_packaging_sales - before_packaging_sales)
+          		/before_packaging_sales, 2) AS variance_rate
+FROM before_after_sale;
+```
+
+| calendar_year | sale_changes | variance_rate |
+| ------------- | ------------ | -------------- |
+| 2018          | 104256193    | 1.63           |
+| 2019          | -20740294    | -0.30          |
+| 2020          | -152325394   | -2.14          |
+
+Based on these results, there are noticable changes in the growth and reduction rates in all three years. The most significant contrast can be seen when comparing sales in 2020 to 2018 where a 3.77% sales pecentage rate gap difference can be seen.
