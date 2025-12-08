@@ -16,7 +16,7 @@ Data Mart is an international online supermarket that specializes in fresh produ
 
 In June 2020, large scale supply changes were made at Data Mart. All Data Mart products now use sustainable packaging methods in every single step from the farm to the customer.
 
-Danny needs help to quantify the impact of this change on the sales performance for Data Mart and it's separate business areas.
+Danny needs help to quantify the impact of this change on the sales performance for Data Mart and its separate business areas.
 
 ## Entity Relationship Diagram
 
@@ -184,7 +184,7 @@ ORDER BY month_number, region;
 | 9            | SOUTH AMERICA | 34175583    |
 | 9            | USA           | 110532368   |
 
-- Only the total sales for September are posted.
+- The query results in the total sales for all months, but only the total sales for September are posted.
   
 **5. What is the total count of transactions for each platform**
 
@@ -245,7 +245,7 @@ ORDER BY calendar_year, month_number;
 | 2018          | 8            | 97.71             | 2.29               |
 | 2018          | 9            | 97.68             | 2.32               |
 
-- Only results from 2018 are displayed. The results includes the percentage of sales for each month until 2020.
+- Only results from 2018 are displayed. The results includes the percentage of sales for each month from 2018, 2019, and 2020.
 
 **7. What is the percentage of sales by demographic for each year in the dataset?**
 
@@ -498,4 +498,4 @@ FROM before_after_sale;
 | 2019          | -20740294    | -0.30          |
 | 2020          | -152325394   | -2.14          |
 
-Based on these results, there are noticable changes in the growth and reduction rates in all three years. The most significant contrast can be seen when comparing sales in 2020 to 2018 where a 3.77% sales pecentage rate gap difference can be seen.
+Based on these results, there are noticable changes in the growth and reduction rates in all three years. The most significant contrast can be seen when comparing sales in 2020 to 2018 where a 3.77% sales percentage rate gap difference can be seen.
