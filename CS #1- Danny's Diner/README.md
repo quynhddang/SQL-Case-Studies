@@ -1,4 +1,4 @@
-# 🏮 Case Study #1: Danny's Diner
+# 🏮 CS #1: Danny's Diner
 
 <img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/73923e95-8ef8-4703-adee-ae5751f17038" />
 
